@@ -17,6 +17,12 @@ protected:
 	TObjectPtr<class UProjectileMovementComponent> ProjectileComp;
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UNiagaraComponent> FireBallComp;
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UNiagaraSystem> HitEffect;
+	UPROPERTY(VisibleAnywhere)
+	FVector StartLocation;	
+	UPROPERTY(EditAnywhere)
+	float MaxDistance = 1200.f;
 
 public:	
 	// Sets default values for this actor's properties
@@ -29,5 +35,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 };

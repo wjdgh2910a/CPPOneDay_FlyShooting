@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "FlyingCreature/FlyingCreature.h"
 #include "Dragon.generated.h"
 
 UCLASS()
-class ONEDAYCPPPROJECT_API ADragon : public APawn
+class ONEDAYCPPPROJECT_API ADragon : public AFlyingCreature
 {
 	GENERATED_BODY()
 
@@ -34,14 +34,12 @@ private:
 	FVector2D MoveBoundsMin;
 	UPROPERTY(EditAnywhere, Category = "Movement Bounds")
 	FVector2D MoveBoundsMax;
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class USphereComponent> SphereComp;
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class USkeletalMeshComponent> MeshComp;
+	UPROPERTY(EditAnywhere, Category = "Movement Bounds")
+	float FireInterval = 1.0f;
+
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UAnimMontage> FireMontage;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AActor> FireballClass;
 
 	TObjectPtr<class UAnimInstance> AnimInstance;
+	FTimerHandle FireTimerHandle;
 };

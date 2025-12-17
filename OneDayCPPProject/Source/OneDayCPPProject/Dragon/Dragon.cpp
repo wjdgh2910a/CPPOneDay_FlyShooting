@@ -14,10 +14,6 @@ ADragon::ADragon()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	SetRootComponent(SphereComp);
-	MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComp"));
-	MeshComp->SetupAttachment(SphereComp);
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DragonMeshAsset(TEXT("/Script/Engine.AnimMontage'/Game/Blueprints/Character/Animation/AM_Fire.AM_Fire'"));
 	if(DragonMeshAsset.Succeeded())
 	{
@@ -30,7 +26,7 @@ void ADragon::BeginPlay()
 {
 	Super::BeginPlay();
 	AnimInstance = MeshComp->GetAnimInstance();
-	
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &ADragon::Fire, FireInterval, true, FireInterval);
 }
 
 // Called every frame
@@ -41,7 +37,6 @@ void ADragon::Tick(float DeltaTime)
 	NewLocation.X = FMath::Clamp(NewLocation.X, MoveBoundsMin.X, MoveBoundsMax.X);
 	NewLocation.Y = FMath::Clamp(NewLocation.Y, MoveBoundsMin.Y, MoveBoundsMax.Y);
 	SetActorLocation(NewLocation);
-	Fire();
 }
 
 // Called to bind functionality to input
@@ -59,7 +54,7 @@ void ADragon::PossessedBy(AController* NewController)
 
 void ADragon::Fire()
 {
-	if (MeshComp && AnimInstance && FireMontage && AnimInstance->Montage_IsPlaying(FireMontage) == false)
+	if (MeshComp && AnimInstance && FireMontage)
 	{
 			AnimInstance->Montage_Play(FireMontage);
 			FVector FireLocation = MeshComp->GetSocketLocation(FName(TEXT("FireSocket")));

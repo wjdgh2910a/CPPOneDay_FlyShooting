@@ -5,6 +5,8 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "FlyingCreature/FlyingCreature.h"
 
 // Sets default values
 AFireBall::AFireBall()
@@ -13,6 +15,7 @@ AFireBall::AFireBall()
 	PrimaryActorTick.bCanEverTick = true;
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	SetRootComponent(SphereComp);
+	SphereComp->OnComponentHit.AddDynamic(this, &AFireBall::OnHit);
 
 	ProjectileComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileComp->InitialSpeed = 800.f;
@@ -28,12 +31,27 @@ AFireBall::AFireBall()
 void AFireBall::BeginPlay()
 {
 	Super::BeginPlay();
+	StartLocation = GetActorLocation();
 }
 
 // Called every frame
 void AFireBall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if((GetActorLocation() - StartLocation).Length() > MaxDistance)
+	{
+		Destroy();
+	}
+}
 
+void AFireBall::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	AFlyingCreature* Creature = Cast<AFlyingCreature>(OtherActor);
+	if(Creature)
+	{
+		Creature->Hit();
+	}
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffect, OtherActor->GetActorLocation(), OtherActor->GetActorRotation());
+	Destroy();
 }
 

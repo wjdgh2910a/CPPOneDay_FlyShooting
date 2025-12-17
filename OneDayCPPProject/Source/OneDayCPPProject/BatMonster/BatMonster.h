@@ -3,18 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "FlyingCreature/FlyingCreature.h"
 #include "BatMonster.generated.h"
 
 UCLASS()
-class ONEDAYCPPPROJECT_API ABatMonster : public APawn
+class ONEDAYCPPPROJECT_API ABatMonster : public AFlyingCreature
 {
 	GENERATED_BODY()
 private:
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class USphereComponent> SphereComp;
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class USkeletalMeshComponent> MeshComp;
+	TObjectPtr<class APath> FollowPath;
+	float MoveSpeed = 200.0f;
+	float MoveDistance = 0.0f;
+	float FireInterval = 2.0f;
+	FTimerHandle FireTimerHandle;
 public:
 	// Sets default values for this pawn's properties
 	ABatMonster();
@@ -30,4 +31,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void SetFollowPath(APath* NewPath) { FollowPath = NewPath; }
+	void MoveSpline(float DeltaTime);
+	void Fire();
 };
