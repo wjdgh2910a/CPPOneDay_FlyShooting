@@ -35,8 +35,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Movement Bounds")
 	FVector2D MoveBoundsMax;
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<class USceneComponent> FirePoint;
-	UPROPERTY(EditAnywhere)
 	TObjectPtr<class USphereComponent> SphereComp;
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class USkeletalMeshComponent> MeshComp;
@@ -44,4 +42,6 @@ private:
 	TObjectPtr<class UAnimMontage> FireMontage;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AActor> FireballClass;
+
+	TObjectPtr<class UAnimInstance> AnimInstance;
 };

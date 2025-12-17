@@ -18,9 +18,6 @@ ADragon::ADragon()
 	SetRootComponent(SphereComp);
 	MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetupAttachment(SphereComp);
-	FirePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FirePoint"));
-	FirePoint->SetupAttachment(MeshComp);
-
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DragonMeshAsset(TEXT("/Script/Engine.AnimMontage'/Game/Blueprints/Character/Animation/AM_Fire.AM_Fire'"));
 	if(DragonMeshAsset.Succeeded())
 	{
@@ -32,6 +29,7 @@ ADragon::ADragon()
 void ADragon::BeginPlay()
 {
 	Super::BeginPlay();
+	AnimInstance = MeshComp->GetAnimInstance();
 	
 }
 
@@ -43,6 +41,7 @@ void ADragon::Tick(float DeltaTime)
 	NewLocation.X = FMath::Clamp(NewLocation.X, MoveBoundsMin.X, MoveBoundsMax.X);
 	NewLocation.Y = FMath::Clamp(NewLocation.Y, MoveBoundsMin.Y, MoveBoundsMax.Y);
 	SetActorLocation(NewLocation);
+	Fire();
 }
 
 // Called to bind functionality to input
@@ -60,15 +59,11 @@ void ADragon::PossessedBy(AController* NewController)
 
 void ADragon::Fire()
 {
-	if (MeshComp)
+	if (MeshComp && AnimInstance && FireMontage && AnimInstance->Montage_IsPlaying(FireMontage) == false)
 	{
-		UAnimInstance* AnimInstance = MeshComp->GetAnimInstance();
-		if (AnimInstance && FireMontage && AnimInstance->Montage_IsPlaying(FireMontage) == false)
-		{
 			AnimInstance->Montage_Play(FireMontage);
 			FVector FireLocation = MeshComp->GetSocketLocation(FName(TEXT("FireSocket")));
 			GetWorld()->SpawnActor<AActor>(FireballClass, FireLocation, GetActorRotation());
-		}
 	}
 }
 

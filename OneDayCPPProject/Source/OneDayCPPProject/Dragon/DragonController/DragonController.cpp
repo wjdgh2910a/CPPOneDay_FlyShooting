@@ -23,11 +23,11 @@ ADragonController::ADragonController()
 	{
 		MoveAction = MoveActionFinder.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UInputAction> FireActionFinder(TEXT(
-		"/Script/EnhancedInput.InputAction'/Game/Blueprints/Character/Input/IA_FireBall.IA_FireBall'"));
-	if (FireActionFinder.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UInputAction> SkillActionFinder(TEXT(
+		"/Script/EnhancedInput.InputAction'/Game/Blueprints/Character/Input/IA_Skill.IA_Skill'"));
+	if (SkillActionFinder.Succeeded())
 	{
-		FireAction = FireActionFinder.Object;
+		SkillAction = SkillActionFinder.Object;
 	}
 }
 
@@ -48,7 +48,7 @@ void ADragonController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ADragonController::MoveInput);
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ADragonController::FireInput);
+		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &ADragonController::SkillInput);
 	}
 }
 
@@ -68,7 +68,6 @@ void ADragonController::MoveInput(const FInputActionValue& Value)
 	}
 }
 
-void ADragonController::FireInput(const FInputActionValue& Value)
+void ADragonController::SkillInput(const FInputActionValue& Value)
 {
-	ControlledDragon->Fire();
 }

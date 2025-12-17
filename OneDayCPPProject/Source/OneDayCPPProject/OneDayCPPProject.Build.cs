@@ -14,7 +14,8 @@ public class OneDayCPPProject : ModuleRules
             }
 			);
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" ,
+		"Niagara"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

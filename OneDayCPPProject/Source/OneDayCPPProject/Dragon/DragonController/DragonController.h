@@ -17,7 +17,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UInputAction> MoveAction;
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<class UInputAction> FireAction;
+	TObjectPtr<class UInputAction> SkillAction;
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UInputMappingContext> MappingContext;
 	UPROPERTY(VisibleAnywhere)
@@ -30,5 +30,5 @@ public:
 	UFUNCTION()
 	void MoveInput(const struct FInputActionValue& Value);
 	UFUNCTION()
-	void FireInput(const struct FInputActionValue& Value);
+	void SkillInput(const struct FInputActionValue& Value);
 };
